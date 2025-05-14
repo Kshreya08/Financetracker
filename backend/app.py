@@ -1,15 +1,11 @@
 import os
-import openai
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-# 🔐 Set your OpenAI API key (preferably from environment variables)
-openai.api_key = os.getenv('OPENAI_API_KEY', 'your-api-key-here')  # Replace or set in env
-
 print("Starting server...")
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend', template_folder='../frontend')
 CORS(app)
 
 # ✅ Database configuration
@@ -19,31 +15,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# ✅ Expense categorization using OpenAI GPT
-def categorize_expense(feature):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a financial assistant who classifies expenses into categories like Food, Transport, Shopping, Bills, Finance, Entertainment, Health, or Other."},
-                {"role": "user", "content": f"What category does this expense belong to: '{feature}'?"}
-            ],
-            temperature=0.2,
-            max_tokens=10
-        )
-        category = response['choices'][0]['message']['content'].strip()
-        return category if category else "Other"
-    except Exception as e:
-        print("OpenAI error:", e)
-        return "Other"
-
 # ✅ User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
 
-# ✅ Expense model with category
+# ✅ Expense model without category classification logic
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     feature = db.Column(db.String(200), nullable=False)
@@ -53,6 +31,25 @@ class Expense(db.Model):
 # ✅ Create tables
 with app.app_context():
     db.create_all()
+
+# ✅ Serve index.html at root
+@app.route('/')
+def serve_index():
+    return send_from_directory('../frontend', 'index.html')
+
+# ✅ Serve register.html (or any other HTML file)
+@app.route('/register')
+def serve_register():
+    return send_from_directory('../frontend', 'register.html')
+
+@app.route('/personal')
+def serve_personal():
+    return send_from_directory('../frontend', 'personal.html')
+
+# ✅ Serve static files (JS, CSS, etc.)
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('../frontend', filename)
 
 # ✅ User registration endpoint
 @app.route('/api/register', methods=['POST'])
@@ -76,7 +73,7 @@ def register_user():
 
     return jsonify({'message': 'User registered successfully'}), 201
 
-# ✅ Expense management endpoint
+# ✅ Expense management endpoint (category set to 'Other' by default)
 @app.route('/api/expenses', methods=['GET', 'POST'])
 def manage_expenses():
     if request.method == 'POST':
@@ -87,12 +84,11 @@ def manage_expenses():
         if not feature or amount is None:
             return jsonify({'error': 'Feature and amount are required'}), 400
 
-        category = categorize_expense(feature)
-        new_expense = Expense(feature=feature, amount=amount, category=category)
+        new_expense = Expense(feature=feature, amount=amount, category="Other")
         db.session.add(new_expense)
         db.session.commit()
 
-        return jsonify({'message': f'Expense added to category: {category}'}), 201
+        return jsonify({'message': 'Expense added successfully'}), 201
 
     else:  # GET
         expenses = Expense.query.all()
@@ -104,4 +100,4 @@ def manage_expenses():
 # ✅ Run the app
 if __name__ == '__main__':
     print("Running Flask app...")
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
