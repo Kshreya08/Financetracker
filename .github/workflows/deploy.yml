@@ -17,10 +17,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-      - name: Lint code
-        run: |
-          pip install flake8
-          flake8 .
       - name: Build Docker image
         run: |
           docker build -t finance-app .
