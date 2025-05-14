@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spending Trend</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .header {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 50px;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 20px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-item h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .header-item p {
+      margin: 5px 0 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00796b;
+    }
+
+    .chart-container {
+      margin-top: 20px;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .features-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .feature:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon-container {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #e0f7fa;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    .icon {
+      font-size: 24px;
+      color: #00796b;
+    }
+
+    .feature-title {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    p {
+      color: #555;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Track Your Finances</h1>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="register.html" class="register-button">Register</a>
+    </div>
+    
+
+    <div class="header">
+      <div class="header-item">
+        <h2>Total Balance</h2>
+        <p>₹42,000</p>
+      </div>
+      <div class="header-item">
+        <h2>This Month's Expense</h2>
+        <p>₹10,400</p>
+      </div>
+    </div>
+
+    <h2>Spending Trend</h2>
+    <p>Your monthly spending pattern</p>
+    <div class="chart-container">
+      <canvas id="spendingTrendChart"></canvas>
+    </div>
+
+    <h2 class="features-header">Features and Benefits</h2>
+    <div class="features-container">
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">❓</div>
+        </div>
+        <h3 class="feature-title">View balances across bank accounts</h3>
+        <p>Get a comprehensive view of your financial health in one place.</p>
+      </div>
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">📝</div>
+        </div>
+        <h3 class="feature-title">One place for all transactions</h3>
+        <p>No more manual tracking or complex spreadsheets.</p>
+      </div>
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">📊</div>
+        </div>
+        <h3 class="feature-title">See where you spend the most</h3>
+        <p>Gain insights into your spending patterns.</p>
+      </div>
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">📅</div>
+        </div>
+        <h3 class="feature-title">Get consolidated</h3>
+        <p>Track your fixed deposits and other investments.</p>
+      </div>
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">⚠️</div>
+        </div>
+        <h3 class="feature-title">Track your FDs</h3>
+        <p>Stay updated on your fixed deposits' status.</p>
+      </div>
+      <div class="feature">
+        <div class="icon-container">
+          <div class="icon">🔗</div>
+        </div>
+        <h3 class="feature-title">Sync multiple accounts</h3>
+        <p>Easily connect across bank accounts and services.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Load script after everything else -->
+  <script src="scripts.js"></script>
+</body>
+
+</html>
